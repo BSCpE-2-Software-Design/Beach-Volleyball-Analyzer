@@ -128,6 +128,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Beach Volleyball Analyzer.cpp" />
+    <ClCompile Include="GameDisplay.cpp" />
+    <ClCompile Include="MatchManager.cpp" />
+    <ClCompile Include="RallyRecorder.cpp" />
+    <ClCompile Include="Rules.cpp" />
+    <ClCompile Include="ScoreKeeper.cpp" />
+    <ClCompile Include="StatTracker.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameDisplay.h" />
+    <ClInclude Include="MatchManager.h" />
+    <ClInclude Include="RallyRecorder.h" />
+    <ClInclude Include="Rules.h" />
+    <ClInclude Include="ScoreKeeper.h" />
+    <ClInclude Include="StatTracker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
