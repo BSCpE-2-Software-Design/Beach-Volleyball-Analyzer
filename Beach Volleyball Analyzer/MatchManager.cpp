@@ -142,7 +142,7 @@ void MatchManager::processInput() {
         default: error = "unknown";
         }
 
-        int winner = Rules::getPointWinnerOnError(teamId);
+        int winner = VolleyballRules::getPointWinnerOnError(teamId);
         m_score.addPoint(winner);
         m_stats.recordError(m_selectedPlayer, error);
         m_recorder.endRallyWithError(error, m_selectedPlayer, teamId);

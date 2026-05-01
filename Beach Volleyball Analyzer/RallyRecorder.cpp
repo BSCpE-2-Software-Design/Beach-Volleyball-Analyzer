@@ -1,6 +1,5 @@
 #include "RallyRecorder.h"
 #include "Rules.h"
-#include <string>
 
 RallyRecorder::RallyRecorder()
     : m_teamATouches(0), m_teamBTouches(0), m_lastTouchPlayer(-1), m_lastTouchTeam(-1), m_rallyEnded(false) {
@@ -48,15 +47,15 @@ bool RallyRecorder::addTouch(int playerId, const std::string& action, int teamId
 
 bool RallyRecorder::checkFourTouchViolation(int teamId) const {
     if (teamId == 0) {
-        return m_teamATouches > Rules::MAX_TOUCHES;
+        return m_teamATouches > VolleyballRules::MAX_TOUCHES;
     }
     else {
-        return m_teamBTouches > Rules::MAX_TOUCHES;
+        return m_teamBTouches > VolleyballRules::MAX_TOUCHES;
     }
 }
 
 bool RallyRecorder::checkDoubleTouch(int playerId) const {
-    return Rules::isDoubleTouch(m_lastTouchPlayer, playerId);
+    return VolleyballRules::isDoubleTouch(m_lastTouchPlayer, playerId);
 }
 
 void RallyRecorder::endRallyWithPoint(int scoringPlayer, int scoringTeam) {
