@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{0b5202df-b7d2-423a-bcb9-6c9d3f0e6ec0}</ProjectGuid>
-    <RootNamespace>BeachVolleyballAnalyzer</RootNamespace>
+    <ProjectGuid>{f2c52647-b65f-49ef-aabf-dbddef6aea38}</ProjectGuid>
+    <RootNamespace>BeachVolleyballAnalyzerTEST</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -105,6 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\uzuma\source\repos\Beach Volleyball Analyzer\Beach Volleyball Analyzer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,22 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Beach Volleyball Analyzer.cpp" />
-    <ClCompile Include="GameDisplay.cpp" />
-    <ClCompile Include="MatchManager.cpp" />
-    <ClCompile Include="RallyRecorder.cpp" />
-    <ClCompile Include="Rules.cpp" />
-    <ClCompile Include="ScoreKeeper.cpp" />
-    <ClCompile Include="StatTracker.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GameDisplay.h" />
-    <ClInclude Include="MatchManager.h" />
-    <ClInclude Include="RallyRecorder.h" />
-    <ClInclude Include="Rules.h" />
-    <ClInclude Include="ScoreKeeper.h" />
-    <ClInclude Include="StatTracker.h" />
-    <ClInclude Include="Touch.h" />
+    <ClCompile Include="Beach Volleyball Analyzer TEST.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,18 +5,13 @@
 
 class StatTracker {
 private:
-    std::map<int, int> m_touchesByPlayer;
-    std::map<int, int> m_errorsByPlayer;
-    std::map<int, int> m_pointsByPlayer;
+    std::map<int, int> m_touches;
+    std::map<int, int> m_errors;
+    std::map<int, int> m_points;
 
 public:
-    void recordTouch(int playerId, const std::string& action);
-    void recordError(int playerId, const std::string& errorType);
+    void recordTouch(int playerId);
+    void recordError(int playerId);
     void recordPoint(int playerId);
     void printReport() const;
-    int getTouches(int playerId) const;
-    int getErrors(int playerId) const;
-    int getPoints(int playerId) const;
-    void reset();
 };
-

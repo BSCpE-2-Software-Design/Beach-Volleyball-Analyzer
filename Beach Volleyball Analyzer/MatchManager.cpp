@@ -1,170 +1,174 @@
 #include "MatchManager.h"
 #include "GameDisplay.h"
-#include "Rules.h"
 #include <iostream>
-#include <limits>
+#include <cctype>
 
-MatchManager::MatchManager() : m_running(true), m_selectedPlayer(-1) {}
+MatchManager::MatchManager() : m_selectedPlayer(-1), m_waitingForAction(false) {}
+
+int MatchManager::getTeamFromPlayer(int playerId) const {
+    return (playerId < 2) ? 0 : 1;
+}
 
 void MatchManager::run() {
-    GameDisplay::clearScreen();
-
-    while (m_running) {
-        displayAll();
+    while (!m_score.isSetFinished()) {
+        GameDisplay::clearScreen();
 
         auto scores = m_score.getScores();
-        if (m_score.isSetFinished()) {
-            GameDisplay::showMessage("\nGAME OVER! Team " +
-                std::to_string(m_score.getWinner()) + " wins!");
-            m_stats.printReport();
-            break;
+        int currentServer = m_score.getCurrentServer();
+        GameDisplay::drawScoreboard(scores.first, scores.second, m_score.getServingTeam(), currentServer);
+        GameDisplay::drawPlayerGrid();
+        GameDisplay::drawActionMenu();
+
+        auto rally = m_recorder.getCurrentRally();
+        GameDisplay::drawRallyLog(rally);
+
+        // Show serve requirement
+        if (!m_recorder.hasServed()) {
+            std::cout << "\nSERVE REQUIRED! Player " << currentServer << " must serve\n";
         }
 
-        processInput();
-    }
-}
-
-void MatchManager::displayAll() {
-    GameDisplay::clearScreen();
-
-    auto scores = m_score.getScores();
-    GameDisplay::drawScoreboard(scores.first, scores.second, m_score.getServingTeam());
-    GameDisplay::drawRallyLog(m_recorder.getCurrentRally());
-    GameDisplay::drawPlayerGrid();
-    GameDisplay::drawActionMenu();
-    GameDisplay::showHelp();
-}
-
-void MatchManager::processInput() {
-    // If rally ended, reset
-    if (m_recorder.isRallyEnded()) {
-        GameDisplay::showMessage("\nRally ended! Starting new rally...");
-        GameDisplay::waitForEnter();
-        m_recorder.clearRally();
-        m_selectedPlayer = -1;
-        return;
-    }
-
-    // Select player if not selected
-    if (m_selectedPlayer == -1) {
-        std::cout << "\nSelect player (0-3, or 9 to quit): ";
-        int input;
+        std::cout << "\n> ";
+        char input;
         std::cin >> input;
 
-        if (input == 9) {
-            m_running = false;
-            return;
+        // Player selection (0-3)
+        if (input >= '0' && input <= '3') {
+            int selected = input - '0';
+            int expectedServer = m_score.getCurrentServer();
+
+            // If serve hasn't happened yet, only the correct server can be selected
+            if (!m_recorder.hasServed() && selected != expectedServer) {
+                std::cout << "RALLY MUST START WITH SERVE! Player " << expectedServer << " must serve.\n";
+                continue;
+            }
+
+            m_selectedPlayer = selected;
+            m_waitingForAction = true;
+            std::cout << "Selected Player " << m_selectedPlayer << ". Choose action.\n";
+            continue;
         }
 
-        if (input >= 1 && input <= 4) {
-            m_selectedPlayer = input;
-            std::cout << "Player " << m_selectedPlayer << " selected.\n";
-        }
-        else {
-            GameDisplay::showError("Invalid player! Choose 1-4.");
-        }
-        return;
-    }
+        // Action selection
+        if (m_waitingForAction && m_selectedPlayer != -1) {
+            int teamId = getTeamFromPlayer(m_selectedPlayer);
+            char upper = std::toupper(input);
+            std::string action;
 
-    // Get action for selected player
-    std::cout << "\nPlayer " << m_selectedPlayer << " selected.\n";
-    std::cout << "Action (s=serve, p=pass, t=set, a=attack, b=block, d=dig, e=error, c=cancel): ";
+            switch (upper) {
+            case 'S': action = "serve"; break;
+            case 'P': action = "pass"; break;
+            case 'E': action = "set"; break;
+            case 'A': action = "attack"; break;
+            case 'B': action = "block"; break;
+            case 'D': action = "dig"; break;
+            default: action = "";
+            }
 
-    char choice;
-    std::cin >> choice;
+            if (!action.empty()) {
+                // Prevent non-serve actions if serve hasn't happened yet
+                if (!m_recorder.hasServed() && action != "serve") {
+                    GameDisplay::showMessage("RALLY MUST START WITH SERVE! Press S to serve.");
+                    m_waitingForAction = false;
+                    m_selectedPlayer = -1;
+                    continue;
+                }
 
-    int teamId = (m_selectedPlayer < 2) ? 0 : 1;
+                // Prevent serve after rally has started
+                if (action == "serve" && m_recorder.hasServed()) {
+                    GameDisplay::showMessage("CANNOT SERVE - Rally already in progress!");
+                    m_waitingForAction = false;
+                    m_selectedPlayer = -1;
+                    continue;
+                }
 
-    switch (choice) {
-    case 's':
-    case 'p':
-    case 't':
-    case 'a':
-    case 'b':
-    case 'd':
-    {
-        std::string action;
-        switch (choice) {
-        case 's': action = "serve"; break;
-        case 'p': action = "pass"; break;
-        case 't': action = "set"; break;
-        case 'a': action = "attack"; break;
-        case 'b': action = "block"; break;
-        case 'd': action = "dig"; break;
-        }
+                bool success = m_recorder.addTouch(m_selectedPlayer, action, teamId);
 
-        bool success = m_recorder.addTouch(m_selectedPlayer, action, teamId);
+                if (success) {
+                    m_stats.recordTouch(m_selectedPlayer);
 
-        if (success) {
-            m_stats.recordTouch(m_selectedPlayer, action);
-            GameDisplay::showMessage("✓ Recorded: Player " +
-                std::to_string(m_selectedPlayer) + " - " + action);
-            m_selectedPlayer = -1;
+                    // Check if attack on 3rd consecutive touch by same team
+                    if (action == "attack" && m_recorder.getConsecutiveTouches() == 3) {
+                        // Won the rally!
+                        m_score.handleServeResult(m_selectedPlayer, true);
+                        m_stats.recordPoint(m_selectedPlayer);
+                        GameDisplay::showMessage("POINT! Team " + std::string(teamId == 0 ? "A" : "B") + " scores!");
+                        m_recorder.clearRally();
+                    }
+                }
+                else {
+                    // Violation occurred
+                    std::string error = m_recorder.getLastError();
 
-            // Check if attack scores (simplified)
-            if (action == "attack") {
-                m_recorder.endRallyWithPoint(m_selectedPlayer, teamId);
-                m_score.addPoint(teamId);
-                m_stats.recordPoint(m_selectedPlayer);
-                GameDisplay::showMessage("POINT! Team " +
-                    std::string(teamId == 0 ? "A" : "B") + " scores!");
+                    // Check if it was a serve error
+                    if (action == "serve") {
+                        m_score.handleServeResult(m_selectedPlayer, false);
+                        GameDisplay::showMessage("SERVE ERROR - Point to other team, serve switches");
+                    }
+                    else {
+                        int otherTeam = (teamId == 0) ? 1 : 0;
+                        m_score.addPoint(otherTeam);
+                        m_stats.recordError(m_selectedPlayer);
+                        GameDisplay::showMessage(error + " - Point to Team " + std::string(otherTeam == 0 ? "A" : "B"));
+                    }
+                    m_recorder.clearRally();
+                }
+
+                m_waitingForAction = false;
                 m_selectedPlayer = -1;
             }
-        }
-        else {
-            GameDisplay::showError(m_recorder.getLastError());
-            int winner = (teamId == 0) ? 1 : 0;
-            m_score.addPoint(winner);
-            m_stats.recordError(m_selectedPlayer, m_recorder.getLastError());
-            m_selectedPlayer = -1;
-        }
-        break;
-    }
-
-    case 'e':  // Error
-    {
-        std::cout << "Error type:\n";
-        std::cout << "  1 = 4-touch violation\n";
-        std::cout << "  2 = Double touch\n";
-        std::cout << "  3 = Ball out\n";
-        std::cout << "  4 = Net touch\n";
-        std::cout << "Choose (1-4): ";
-
-        int errorType;
-        std::cin >> errorType;
-
-        std::string error;
-        switch (errorType) {
-        case 1: error = "four_touch"; break;
-        case 2: error = "double_touch"; break;
-        case 3: error = "ball_out"; break;
-        case 4: error = "net_touch"; break;
-        default: error = "unknown";
+            continue;
         }
 
-        int winner = VolleyballRules::getPointWinnerOnError(teamId);
-        m_score.addPoint(winner);
-        m_stats.recordError(m_selectedPlayer, error);
-        m_recorder.endRallyWithError(error, m_selectedPlayer, teamId);
-        GameDisplay::showError(error + " - Point to Team " +
-            std::string(winner == 0 ? "A" : "B"));
-        m_selectedPlayer = -1;
-        break;
+        // Error handling (X key)
+        char upper = std::toupper(input);
+        if (upper == 'X') {
+            if (m_selectedPlayer == -1) {
+                int expectedServer = m_score.getCurrentServer();
+                std::cout << "Select player " << expectedServer << " first\n";
+                continue;
+            }
+
+            // If serve hasn't happened yet, it's a serve error
+            if (!m_recorder.hasServed()) {
+                m_score.handleServeResult(m_selectedPlayer, false);
+                GameDisplay::showMessage("SERVE ERROR - Point to other team, serve switches");
+                m_recorder.clearRally();
+                m_waitingForAction = false;
+                m_selectedPlayer = -1;
+            }
+            else {
+                // General error after serve
+                int teamId = getTeamFromPlayer(m_selectedPlayer);
+                int otherTeam = (teamId == 0) ? 1 : 0;
+                m_score.addPoint(otherTeam);
+                m_stats.recordError(m_selectedPlayer);
+                GameDisplay::showMessage("ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B"));
+                m_recorder.clearRally();
+                m_waitingForAction = false;
+                m_selectedPlayer = -1;
+            }
+            continue;
+        }
+
+        // Stats
+        if (upper == 'T') {
+            m_stats.printReport();
+            std::cout << "Press Enter...";
+            std::cin.ignore();
+            std::cin.get();
+            continue;
+        }
+
+        // Quit
+        if (upper == 'Q') {
+            std::cout << "Goodbye!\n";
+            break;
+        }
     }
 
-    case 'c':  // Cancel
-        m_selectedPlayer = -1;
-        GameDisplay::showMessage("Selection cancelled.");
-        break;
-
-    default:
-        GameDisplay::showError("Invalid choice!");
-        break;
-    }
-
-    GameDisplay::waitForEnter();
-}
-
-bool MatchManager::isGameRunning() const {
-    return m_running;
+    // Game over
+    auto scores = m_score.getScores();
+    std::cout << "\nGAME OVER!\n";
+    std::cout << "Final: Team A " << scores.first << " - " << scores.second << " Team B\n";
+    m_stats.printReport();
 }

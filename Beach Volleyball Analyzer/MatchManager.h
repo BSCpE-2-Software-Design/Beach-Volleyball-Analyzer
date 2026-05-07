@@ -9,13 +9,12 @@ private:
     RallyRecorder m_recorder;
     ScoreKeeper m_score;
     StatTracker m_stats;
-    bool m_running;
     int m_selectedPlayer;
+    bool m_waitingForAction;
+
+    int getTeamFromPlayer(int playerId) const;
 
 public:
     MatchManager();
     void run();
-    void processInput();
-    void displayAll();
-    bool isGameRunning() const;
 };
