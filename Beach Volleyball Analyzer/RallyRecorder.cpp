@@ -2,7 +2,7 @@
 
 RallyRecorder::RallyRecorder()
     : m_consecutiveTouchesSameTeam(0), m_lastTouchPlayer(-1),
-    m_lastTouchTeam(-1), m_hasServed(false) {
+    m_lastTouchTeam(-1), m_hasServed(false), m_servingPlayer(-1) {
 }
 
 bool RallyRecorder::addTouch(int playerId, const std::string& action, int teamId) {
@@ -22,6 +22,7 @@ bool RallyRecorder::addTouch(int playerId, const std::string& action, int teamId
     // Mark that serve has occurred
     if (action == "serve") {
         m_hasServed = true;
+        m_servingPlayer = playerId;
     }
 
     // RULE 3: Double touch (same player twice in a row on same team)
@@ -29,7 +30,6 @@ bool RallyRecorder::addTouch(int playerId, const std::string& action, int teamId
         m_lastError = "DOUBLE TOUCH";
         return false;
     }
-
     // RULE 4: Team change - reset consecutive counter
     if (m_lastTouchTeam != teamId && m_lastTouchTeam != -1) {
         m_consecutiveTouchesSameTeam = 0;
@@ -59,6 +59,7 @@ void RallyRecorder::clearRally() {
     m_lastTouchTeam = -1;
     m_lastError = "";
     m_hasServed = false;
+    m_servingPlayer = -1;
 }
 
 std::string RallyRecorder::getLastError() const {
@@ -79,4 +80,8 @@ std::vector<Touch> RallyRecorder::getCurrentRally() const {
 
 bool RallyRecorder::hasServed() const {
     return m_hasServed;
+}
+
+int RallyRecorder::getServingPlayer() const {
+    return m_servingPlayer;
 }

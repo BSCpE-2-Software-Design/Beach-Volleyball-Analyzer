@@ -12,6 +12,7 @@ private:
     int m_lastTouchTeam;
     std::string m_lastError;
     bool m_hasServed;
+    int m_servingPlayer;
 
 public:
     RallyRecorder();
@@ -22,4 +23,5 @@ public:
     int getLastTouchTeam() const;
     std::vector<Touch> getCurrentRally() const;
     bool hasServed() const;
+    int getServingPlayer() const;
 };

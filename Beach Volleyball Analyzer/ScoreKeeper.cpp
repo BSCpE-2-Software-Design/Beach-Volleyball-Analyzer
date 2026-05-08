@@ -10,9 +10,13 @@ ScoreKeeper::ScoreKeeper()
 void ScoreKeeper::addPoint(int team) {
     if (team == 0) {
         m_teamAScore++;
-    }
+    }       
     else {
         m_teamBScore++;
+    }
+    // When a team scores a point, they will serve next.
+    if (team == 0 || team == 1) {
+        m_servingTeam = team;
     }
 }
 
@@ -46,25 +50,14 @@ void ScoreKeeper::handleServeResult(int servingPlayer, bool pointWon) {
         // SWITCH SERVE TO THE OTHER TEAM
         m_servingTeam = otherTeam;
 
-        // Advance the server for the team that LOST (so next time they serve, other player)
         if (team == 0) {
-            // Team A lost - next time they serve, use other player
-            if (m_currentServerA == 0) {
-                m_currentServerA = 1;
-            }
-            else {
-                m_currentServerA = 0;
-            }
+            // Team A lost - choose the other player from the one who just served
+            m_currentServerA = (servingPlayer == 0) ? 1 : 0;
             std::cout << "Team A lost serve. Next Team A server will be: " << m_currentServerA << std::endl;
         }
         else {
-            // Team B lost - next time they serve, use other player
-            if (m_currentServerB == 2) {
-                m_currentServerB = 3;
-            }
-            else {
-                m_currentServerB = 2;
-            }
+            // Team B lost - choose the other player from the one who just served
+            m_currentServerB = (servingPlayer == 2) ? 3 : 2;
             std::cout << "Team B lost serve. Next Team B server will be: " << m_currentServerB << std::endl;
         }
 
@@ -105,4 +98,10 @@ void ScoreKeeper::reset() {
     m_servingTeam = 0;
     m_currentServerA = 0;
     m_currentServerB = 2;
+}
+
+void ScoreKeeper::setServingTeam(int team) {
+    if (team == 0 || team == 1) {
+        m_servingTeam = team;
+    }
 }

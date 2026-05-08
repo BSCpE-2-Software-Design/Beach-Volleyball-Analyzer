@@ -89,7 +89,15 @@ void MatchManager::run() {
                     // Check if attack on 3rd consecutive touch by same team
                     if (action == "attack" && m_recorder.getConsecutiveTouches() == 3) {
                         // Won the rally!
-                        m_score.handleServeResult(m_selectedPlayer, true);
+                        int scoringTeam = teamId;
+                        // Determine who served this rally (fallback to current server)
+                        int servingPlayer = m_recorder.getServingPlayer();
+                        if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
+                        int servingTeam = getTeamFromPlayer(servingPlayer);
+                        bool pointWon = (scoringTeam == servingTeam);
+
+                        // Let ScoreKeeper handle adding the point and rotating serve
+                        m_score.handleServeResult(servingPlayer, pointWon);
                         m_stats.recordPoint(m_selectedPlayer);
                         GameDisplay::showMessage("POINT! Team " + std::string(teamId == 0 ? "A" : "B") + " scores!");
                         m_recorder.clearRally();
@@ -101,13 +109,18 @@ void MatchManager::run() {
 
                     // Check if it was a serve error
                     if (action == "serve") {
+                        // Serve error: point to other team. Use handleServeResult so
+                        // ScoreKeeper can rotate servers properly based on who served.
                         m_score.handleServeResult(m_selectedPlayer, false);
                         GameDisplay::showMessage("SERVE ERROR - Point to other team, serve switches");
                     }
                     else {
-                        int otherTeam = (teamId == 0) ? 1 : 0;
-                        m_score.addPoint(otherTeam);
+                        // Non-serve violation: award point to other team and switch serve
+                        int servingPlayer = m_recorder.getServingPlayer();
+                        if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
+                        m_score.handleServeResult(servingPlayer, false);
                         m_stats.recordError(m_selectedPlayer);
+                        int otherTeam = (teamId == 0) ? 1 : 0;
                         GameDisplay::showMessage(error + " - Point to Team " + std::string(otherTeam == 0 ? "A" : "B"));
                     }
                     m_recorder.clearRally();
@@ -137,10 +150,11 @@ void MatchManager::run() {
                 m_selectedPlayer = -1;
             }
             else {
-                // General error after serve
+                // General error after serve: award point to other team and switch serve
                 int teamId = getTeamFromPlayer(m_selectedPlayer);
                 int otherTeam = (teamId == 0) ? 1 : 0;
-                m_score.addPoint(otherTeam);
+                // Use the recorded serving player for this rally
+                m_score.handleServeResult(m_recorder.getServingPlayer(), false);
                 m_stats.recordError(m_selectedPlayer);
                 GameDisplay::showMessage("ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B"));
                 m_recorder.clearRally();
@@ -168,7 +182,7 @@ void MatchManager::run() {
 
     // Game over
     auto scores = m_score.getScores();
-    std::cout << "\nGAME OVER!\n";
+    std::cout << "\nGAME OVER!w\n";
     std::cout << "Final: Team A " << scores.first << " - " << scores.second << " Team B\n";
     m_stats.printReport();
 }

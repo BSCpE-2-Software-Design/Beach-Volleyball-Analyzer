@@ -19,4 +19,5 @@ public:
     bool isSetFinished() const;
     int getServingTeam() const;
     void reset();
+    void setServingTeam(int team);
 };
