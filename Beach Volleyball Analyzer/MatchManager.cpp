@@ -86,21 +86,103 @@ void MatchManager::run() {
                 if (success) {
                     m_stats.recordTouch(m_selectedPlayer);
 
-                    // Check if attack on 3rd consecutive touch by same team
-                    if (action == "attack" && m_recorder.getConsecutiveTouches() == 3) {
-                        // Won the rally!
-                        int scoringTeam = teamId;
-                        // Determine who served this rally (fallback to current server)
-                        int servingPlayer = m_recorder.getServingPlayer();
-                        if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
-                        int servingTeam = getTeamFromPlayer(servingPlayer);
-                        bool pointWon = (scoringTeam == servingTeam);
+                    // Special handling for attack: allow marking error or result (block/dig/in)
+                    if (action == "attack") {
+                        std::cout << "Was the attack an error? (Y/N): ";
+                        char attErr;
+                        std::cin >> attErr;
+                        attErr = std::toupper(attErr);
 
-                        // Let ScoreKeeper handle adding the point and rotating serve
-                        m_score.handleServeResult(servingPlayer, pointWon);
-                        m_stats.recordPoint(m_selectedPlayer);
-                        GameDisplay::showMessage("POINT! Team " + std::string(teamId == 0 ? "A" : "B") + " scores!");
-                        m_recorder.clearRally();
+                        if (attErr == 'Y') {
+                            // Attack error: award point to other team and switch serve
+                            int servingPlayer = m_recorder.getServingPlayer();
+                            if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
+                            m_score.handleServeResult(servingPlayer, false);
+                            m_stats.recordError(m_selectedPlayer);
+                            GameDisplay::showMessage("ATTACK ERROR - Point to other team, serve switches");
+                            m_recorder.clearRally();
+                        }
+                        else {
+                            // Attack was good - ask what happened on the other side
+                            std::cout << "Attack result? [B]lock  [D]ig  [I]n (point): ";
+                            char res;
+                            std::cin >> res;
+                            res = std::toupper(res);
+
+                            int otherTeam = (teamId == 0) ? 1 : 0;
+
+                            if (res == 'I') {
+                                // Attack landed: point to attacking team
+                                int scoringTeam = teamId;
+                                int servingPlayer = m_recorder.getServingPlayer();
+                                if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
+                                int servingTeam = getTeamFromPlayer(servingPlayer);
+                                bool pointWon = (scoringTeam == servingTeam);
+                                m_score.handleServeResult(servingPlayer, pointWon);
+                                m_stats.recordPoint(m_selectedPlayer);
+                                GameDisplay::showMessage("POINT! Team " + std::string(teamId == 0 ? "A" : "B") + " scores!");
+                                m_recorder.clearRally();
+                            }
+                            else if (res == 'D') {
+                                // Other team digs: ask which defending player performed the dig
+                                std::cout << "Select defending player (" << (otherTeam == 0 ? "0 or 1" : "2 or 3") << "): ";
+                                int defPlayer;
+                                std::cin >> defPlayer;
+                                if (getTeamFromPlayer(defPlayer) != otherTeam) {
+                                    // default to first player of the defending team
+                                    defPlayer = otherTeam * 2;
+                                }
+
+                                bool added = m_recorder.addTouch(defPlayer, "dig", otherTeam);
+                                if (added) {
+                                    m_stats.recordTouch(defPlayer);
+                                }
+                                else {
+                                    GameDisplay::showMessage(std::string("Could not record dig: ") + m_recorder.getLastError());
+                                    m_recorder.clearRally();
+                                }
+                            }
+                            else if (res == 'B') {
+                                // Other team blocks: ask which player and whether block was successful
+                                std::cout << "Select blocking player (" << (otherTeam == 0 ? "0 or 1" : "2 or 3") << "): ";
+                                int blkPlayer;
+                                std::cin >> blkPlayer;
+                                if (getTeamFromPlayer(blkPlayer) != otherTeam) {
+                                    blkPlayer = otherTeam * 2;
+                                }
+
+                                // Record the block touch
+                                bool added = m_recorder.addTouch(blkPlayer, "block", otherTeam);
+                                if (added) {
+                                    m_stats.recordTouch(blkPlayer);
+                                }
+                                else {
+                                    GameDisplay::showMessage(std::string("Could not record block: ") + m_recorder.getLastError());
+                                    m_recorder.clearRally();
+                                }
+
+                                std::cout << "Was the block successful (point to blocking team)? (Y/N): ";
+                                char blkSucc;
+                                std::cin >> blkSucc;
+                                blkSucc = std::toupper(blkSucc);
+
+                                if (blkSucc == 'Y') {
+                                    int scoringTeam = otherTeam;
+                                    int servingPlayer = m_recorder.getServingPlayer();
+                                    if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
+                                    int servingTeam = getTeamFromPlayer(servingPlayer);
+                                    bool pointWon = (scoringTeam == servingTeam);
+                                    m_score.handleServeResult(servingPlayer, pointWon);
+                                    m_stats.recordPoint(blkPlayer);
+                                    GameDisplay::showMessage("POINT! Team " + std::string(otherTeam == 0 ? "A" : "B") + " scores!");
+                                    m_recorder.clearRally();
+                                }
+                                // if block not successful, rally continues after recording the block touch
+                            }
+                        }
+                    }
+                    else {
+                        // Non-attack actions: no special immediate processing here
                     }
                 }
                 else {
