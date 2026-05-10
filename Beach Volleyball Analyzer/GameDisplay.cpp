@@ -24,7 +24,7 @@ void GameDisplay::drawPlayerGrid() {
 void GameDisplay::drawActionMenu() {
     std::cout << "\n ACTIONS:\n";
     std::cout << " [S]erve  [P]ass  [E]set  [A]ttack  [B]lock  [D]ig\n";
-    std::cout << " [X] Serve Error  [T] Stats  [Q]uit\n";
+    std::cout << " [T] Stats  [Q]uit\n";
 }
 
 void GameDisplay::drawRallyLog(const std::vector<Touch>& touches) {
