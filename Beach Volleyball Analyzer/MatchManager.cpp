@@ -86,20 +86,32 @@ void MatchManager::run() {
                 if (success) {
                     m_stats.recordTouch(m_selectedPlayer);
 
-                    // Special handling for serve: allow marking error
+                    // Special handling for serve
                     if (action == "serve") {
-                        std::cout << "Was the serve an error? (Y/N): ";
-                        char servErr;
-                        std::cin >> servErr;
-                        servErr = std::toupper(servErr);
+                        std::cout << "Serve result? [A]ce  [E]rror  [O]ther: ";
+                        char servRes;
+                        std::cin >> servRes;
+                        servRes = std::toupper(servRes);
 
-                        if (servErr == 'Y') {
+                        int otherTeam = (teamId == 0) ? 1 : 0;
+
+                        if (servRes == 'A') {
+                            // Service ace: point to serving team, serve continues
+                            m_score.handleServeResult(m_selectedPlayer, true);
+                            m_stats.recordPoint(m_selectedPlayer);
+                            GameDisplay::showMessage("SERVICE ACE! Team " + std::string(teamId == 0 ? "A" : "B") + " scores, serve continues");
+                            m_recorder.clearRally();
+                        }
+                        else if (servRes == 'E') {
                             // Serve error: point to other team and switch serve
-                            int otherTeam = (teamId == 0) ? 1 : 0;
                             m_score.handleServeResult(m_selectedPlayer, false);
                             m_stats.recordError(m_selectedPlayer);
                             GameDisplay::showMessage("SERVE ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B") + ", serve switches");
                             m_recorder.clearRally();
+                        }
+                        else if (servRes == 'O') {
+                            // Other: rally continues after serve
+                            std::cout << "Serve recorded. Rally continues...\n";
                         }
                     }
                     // Special handling for attack: allow marking error or result (block/dig/in)
