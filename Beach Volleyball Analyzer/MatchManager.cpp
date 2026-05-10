@@ -86,8 +86,24 @@ void MatchManager::run() {
                 if (success) {
                     m_stats.recordTouch(m_selectedPlayer);
 
+                    // Special handling for serve: allow marking error
+                    if (action == "serve") {
+                        std::cout << "Was the serve an error? (Y/N): ";
+                        char servErr;
+                        std::cin >> servErr;
+                        servErr = std::toupper(servErr);
+
+                        if (servErr == 'Y') {
+                            // Serve error: point to other team and switch serve
+                            int otherTeam = (teamId == 0) ? 1 : 0;
+                            m_score.handleServeResult(m_selectedPlayer, false);
+                            m_stats.recordError(m_selectedPlayer);
+                            GameDisplay::showMessage("SERVE ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B") + ", serve switches");
+                            m_recorder.clearRally();
+                        }
+                    }
                     // Special handling for attack: allow marking error or result (block/dig/in)
-                    if (action == "attack") {
+                    else if (action == "attack") {
                         std::cout << "Was the attack an error? (Y/N): ";
                         char attErr;
                         std::cin >> attErr;
@@ -95,11 +111,12 @@ void MatchManager::run() {
 
                         if (attErr == 'Y') {
                             // Attack error: award point to other team and switch serve
+                            int otherTeam = (teamId == 0) ? 1 : 0;
                             int servingPlayer = m_recorder.getServingPlayer();
                             if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
                             m_score.handleServeResult(servingPlayer, false);
                             m_stats.recordError(m_selectedPlayer);
-                            GameDisplay::showMessage("ATTACK ERROR - Point to other team, serve switches");
+                            GameDisplay::showMessage("ATTACK ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B") + ", serve switches");
                             m_recorder.clearRally();
                         }
                         else {
@@ -120,7 +137,7 @@ void MatchManager::run() {
                                 bool pointWon = (scoringTeam == servingTeam);
                                 m_score.handleServeResult(servingPlayer, pointWon);
                                 m_stats.recordPoint(m_selectedPlayer);
-                                GameDisplay::showMessage("POINT! Team " + std::string(teamId == 0 ? "A" : "B") + " scores!");
+                                GameDisplay::showMessage("POINT! Team " + std::string(teamId == 0 ? "A" : "B") + " scores! Serve " + (pointWon ? "continues" : "switches"));
                                 m_recorder.clearRally();
                             }
                             else if (res == 'D') {
@@ -174,7 +191,7 @@ void MatchManager::run() {
                                     bool pointWon = (scoringTeam == servingTeam);
                                     m_score.handleServeResult(servingPlayer, pointWon);
                                     m_stats.recordPoint(blkPlayer);
-                                    GameDisplay::showMessage("POINT! Team " + std::string(otherTeam == 0 ? "A" : "B") + " scores!");
+                                    GameDisplay::showMessage("POINT! Team " + std::string(otherTeam == 0 ? "A" : "B") + " scores! Serve " + (pointWon ? "continues" : "switches"));
                                     m_recorder.clearRally();
                                 }
                                 // if block not successful, rally continues after recording the block touch
@@ -182,29 +199,20 @@ void MatchManager::run() {
                         }
                     }
                     else {
-                        // Non-attack actions: no special immediate processing here
+                        // Non-attack, non-serve actions: no special immediate processing here
                     }
                 }
                 else {
                     // Violation occurred
                     std::string error = m_recorder.getLastError();
+                    int servingPlayer = m_recorder.getServingPlayer();
+                    if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
+                    int otherTeam = (teamId == 0) ? 1 : 0;
 
-                    // Check if it was a serve error
-                    if (action == "serve") {
-                        // Serve error: point to other team. Use handleServeResult so
-                        // ScoreKeeper can rotate servers properly based on who served.
-                        m_score.handleServeResult(m_selectedPlayer, false);
-                        GameDisplay::showMessage("SERVE ERROR - Point to other team, serve switches");
-                    }
-                    else {
-                        // Non-serve violation: award point to other team and switch serve
-                        int servingPlayer = m_recorder.getServingPlayer();
-                        if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
-                        m_score.handleServeResult(servingPlayer, false);
-                        m_stats.recordError(m_selectedPlayer);
-                        int otherTeam = (teamId == 0) ? 1 : 0;
-                        GameDisplay::showMessage(error + " - Point to Team " + std::string(otherTeam == 0 ? "A" : "B"));
-                    }
+                    // Award point to other team and switch serve
+                    m_score.handleServeResult(servingPlayer, false);
+                    m_stats.recordError(m_selectedPlayer);
+                    GameDisplay::showMessage(error + " - Point to Team " + std::string(otherTeam == 0 ? "A" : "B") + ", serve switches");
                     m_recorder.clearRally();
                 }
 
@@ -225,8 +233,9 @@ void MatchManager::run() {
 
             // If serve hasn't happened yet, it's a serve error
             if (!m_recorder.hasServed()) {
+                int otherTeam = (getTeamFromPlayer(m_selectedPlayer) == 0) ? 1 : 0;
                 m_score.handleServeResult(m_selectedPlayer, false);
-                GameDisplay::showMessage("SERVE ERROR - Point to other team, serve switches");
+                GameDisplay::showMessage("SERVE ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B") + ", serve switches");
                 m_recorder.clearRally();
                 m_waitingForAction = false;
                 m_selectedPlayer = -1;
@@ -238,7 +247,7 @@ void MatchManager::run() {
                 // Use the recorded serving player for this rally
                 m_score.handleServeResult(m_recorder.getServingPlayer(), false);
                 m_stats.recordError(m_selectedPlayer);
-                GameDisplay::showMessage("ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B"));
+                GameDisplay::showMessage("ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B") + ", serve switches");
                 m_recorder.clearRally();
                 m_waitingForAction = false;
                 m_selectedPlayer = -1;
@@ -264,7 +273,7 @@ void MatchManager::run() {
 
     // Game over
     auto scores = m_score.getScores();
-    std::cout << "\nGAME OVER!w\n";
+    std::cout << "\nGAME OVER!\n";
     std::cout << "Final: Team A " << scores.first << " - " << scores.second << " Team B\n";
     m_stats.printReport();
 }
