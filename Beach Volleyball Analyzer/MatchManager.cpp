@@ -101,7 +101,7 @@ void MatchManager::run() {
                             m_stats.recordPoint(m_selectedPlayer);
                             GameDisplay::showMessage("SERVICE ACE! Team " + std::string(teamId == 0 ? "A" : "B") + " scores, serve continues");
                             m_recorder.clearRally();
-                        }
+                        }       
                         else if (servRes == 'E') {
                             // Serve error: point to other team and switch serve
                             m_score.handleServeResult(m_selectedPlayer, false);
@@ -112,6 +112,96 @@ void MatchManager::run() {
                         else if (servRes == 'O') {
                             // Other: rally continues after serve
                             std::cout << "Serve recorded. Rally continues...\n";
+                        }
+                    }
+                    // Special handling for pass
+                    else if (action == "pass") {
+                        std::cout << "Was the pass successful? (Y/N): ";
+                        char passSucc;
+                        std::cin >> passSucc;
+                        passSucc = std::toupper(passSucc);
+
+                        if (passSucc == 'N') {
+                            // Pass error: award point to other team and switch serve
+                            int otherTeam = (teamId == 0) ? 1 : 0;
+                            int servingPlayer = m_recorder.getServingPlayer();
+                            if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
+                            m_score.handleServeResult(servingPlayer, false);
+                            m_stats.recordError(m_selectedPlayer);
+                            GameDisplay::showMessage("PASS ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B") + ", serve switches");
+                            m_recorder.clearRally();
+                        }
+                        else {
+                            // Pass successful: rally continues
+                            std::cout << "Good pass. Rally continues...\n";
+                        }
+                    }
+                    // Special handling for set
+                    else if (action == "set") {
+                        std::cout << "Was the set successful? (Y/N): ";
+                        char setSucc;
+                        std::cin >> setSucc;
+                        setSucc = std::toupper(setSucc);
+
+                        if (setSucc == 'N') {
+                            // Set error: award point to other team and switch serve
+                            int otherTeam = (teamId == 0) ? 1 : 0;
+                            int servingPlayer = m_recorder.getServingPlayer();
+                            if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
+                            m_score.handleServeResult(servingPlayer, false);
+                            m_stats.recordError(m_selectedPlayer);
+                            GameDisplay::showMessage("SET ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B") + ", serve switches");
+                            m_recorder.clearRally();
+                        }
+                        else {
+                            // Set successful: rally continues
+                            std::cout << "Good set. Rally continues...\n";
+                        }
+                    }
+                    // Special handling for block
+                    else if (action == "block") {
+                        std::cout << "Was the block successful (point to blocker)? (Y/N): ";
+                        char blkSucc;
+                        std::cin >> blkSucc;
+                        blkSucc = std::toupper(blkSucc);
+
+                        if (blkSucc == 'Y') {
+                            // Block successful: point to blocking team
+                            int otherTeam = (teamId == 0) ? 1 : 0;
+                            int servingPlayer = m_recorder.getServingPlayer();
+                            if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
+                            int servingTeam = getTeamFromPlayer(servingPlayer);
+                            bool pointWon = (teamId == servingTeam);
+                            m_score.handleServeResult(servingPlayer, pointWon);
+                            m_stats.recordPoint(m_selectedPlayer);
+                            GameDisplay::showMessage("BLOCK POINT! Team " + std::string(teamId == 0 ? "A" : "B") + " scores! Serve " + (pointWon ? "continues" : "switches"));
+                            m_recorder.clearRally();
+                        }
+                        else {
+                            // Block not successful: rally continues
+                            std::cout << "Block attempt unsuccessful. Rally continues...\n";
+                        }
+                    }
+                    // Special handling for dig
+                    else if (action == "dig") {
+                        std::cout << "Was the dig successful? (Y/N): ";
+                        char digSucc;
+                        std::cin >> digSucc;
+                        digSucc = std::toupper(digSucc);
+
+                        if (digSucc == 'N') {
+                            // Dig error: award point to other team and switch serve
+                            int otherTeam = (teamId == 0) ? 1 : 0;
+                            int servingPlayer = m_recorder.getServingPlayer();
+                            if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
+                            m_score.handleServeResult(servingPlayer, false);
+                            m_stats.recordError(m_selectedPlayer);
+                            GameDisplay::showMessage("DIG ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B") + ", serve switches");
+                            m_recorder.clearRally();
+                        }
+                        else {
+                            // Dig successful: rally continues
+                            std::cout << "Good dig. Rally continues...\n";
                         }
                     }
                     // Special handling for attack: allow marking error or result (block/dig/in)
@@ -209,9 +299,6 @@ void MatchManager::run() {
                                 // if block not successful, rally continues after recording the block touch
                             }
                         }
-                    }
-                    else {
-                        // Non-attack, non-serve actions: no special immediate processing here
                     }
                 }
                 else {
