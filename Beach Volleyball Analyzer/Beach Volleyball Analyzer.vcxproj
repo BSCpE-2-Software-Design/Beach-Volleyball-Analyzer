@@ -136,6 +136,7 @@
     <ClCompile Include="StatTracker.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="doctest.h" />
     <ClInclude Include="GameDisplay.h" />
     <ClInclude Include="MatchManager.h" />
     <ClInclude Include="RallyRecorder.h" />
