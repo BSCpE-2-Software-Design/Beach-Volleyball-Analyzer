@@ -212,16 +212,18 @@ void MatchManager::run() {
                         attErr = std::toupper(attErr);
 
                         if (attErr == 'Y') {
-                            // Attack error: award point to other team and switch serve
+                            // Attack error
                             int otherTeam = (teamId == 0) ? 1 : 0;
                             int servingPlayer = m_recorder.getServingPlayer();
                             if (servingPlayer == -1) servingPlayer = m_score.getCurrentServer();
                             m_score.handleServeResult(servingPlayer, false);
+                            m_stats.recordAttack(m_selectedPlayer, true);  // Record attack error
                             m_stats.recordError(m_selectedPlayer);
                             GameDisplay::showMessage("ATTACK ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B") + ", serve switches");
                             m_recorder.clearRally();
                         }
                         else {
+                            m_stats.recordAttack(m_selectedPlayer, false);  // Record successful attack attempt
                             // Attack was good - ask what happened on the other side
                             std::cout << "Attack result? [B]lock  [D]ig  [I]n (point): ";
                             char res;
@@ -356,7 +358,14 @@ void MatchManager::run() {
 
         // Stats
         if (upper == 'T') {
-            m_stats.printReport();
+            std::cout << "\n[1] Basic Stats\n[2] Detailed Stats\nSelect: ";
+            char statChoice;
+            std::cin >> statChoice;
+            if (statChoice == '2') {
+                m_stats.printDetailedStats();
+            } else {
+                m_stats.printReport();
+            }
             std::cout << "Press Enter...";
             std::cin.ignore();
             std::cin.get();
@@ -372,7 +381,21 @@ void MatchManager::run() {
 
     // Game over
     auto scores = m_score.getScores();
-    std::cout << "\nGAME OVER!\n";
-    std::cout << "Final: Team A " << scores.first << " - " << scores.second << " Team B\n";
-    m_stats.printReport();
+    std::cout << "\n";
+    std::cout << "##########################################################################\n";
+    std::cout << "#                          GAME OVER!                                    #\n";
+    int winningTeam = (scores.first > scores.second) ? 0 : 1;
+    std::cout << "#                         Team " << (winningTeam == 0 ? "A" : "B") << " WINS!                                   #\n";
+    std::cout << "##########################################################################\n";
+    std::cout << "\nFinal Score: Team A " << scores.first << " - " << scores.second << " Team B\n";
+
+    // Display stats options
+    std::cout << "\n[1] Basic Stats\n[2] Detailed Stats\nSelect: ";
+    char statChoice;
+    std::cin >> statChoice;
+    if (statChoice == '2') {
+        m_stats.printDetailedStats();
+    } else {
+        m_stats.printReport();
+    }
 }
