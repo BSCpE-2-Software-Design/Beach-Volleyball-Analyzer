@@ -12,9 +12,9 @@ private:
     int m_selectedPlayer;
     bool m_waitingForAction;
 
+public:
     int getTeamFromPlayer(int playerId) const;
 
-public:
     MatchManager();
     void run();
 };
