@@ -1,3 +1,4 @@
+
 #include "doctest.h"
 #include "MatchManager.h"
 
@@ -53,7 +54,24 @@ TEST_CASE("MatchManager - getTeamFromPlayer boundaries") {
     }
 }
 
+TEST_CASE("MatchManager - team logic correctness") {
+    MatchManager manager;
 
+    SUBCASE("Team identification consistency") {
+        // Each player should always return the same team
+        for (int i = 0; i < 4; i++) {
+            int team1 = manager.getTeamFromPlayer(i);
+            int team2 = manager.getTeamFromPlayer(i);
+            CHECK_EQ(team1, team2);
+        }
+    }
+
+    SUBCASE("Team boundary at player 2") {
+        int lastTeamA = manager.getTeamFromPlayer(1);
+        int firstTeamB = manager.getTeamFromPlayer(2);
+        CHECK_NE(lastTeamA, firstTeamB);
+    }
+}
 
 TEST_CASE("MatchManager - opposite team calculation") {
     MatchManager manager;
