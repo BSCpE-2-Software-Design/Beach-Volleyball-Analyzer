@@ -1,6 +1,6 @@
 
 #include "doctest.h"
-#include "MatchManager.h"
+#include "Core/MatchManager.h"
 
 TEST_CASE("MatchManager - getTeamFromPlayer") {
     MatchManager manager;

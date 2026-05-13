@@ -18,6 +18,31 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Statistics\AttackStats.cpp" />
+    <ClCompile Include="Beach Volleyball Analyzer.cpp" />
+    <ClCompile Include="Core\MatchManager.cpp" />
+    <ClCompile Include="Core\RallyRecorder.cpp" />
+    <ClCompile Include="Rules\Rules.cpp" />
+    <ClCompile Include="Scoring\ScoreKeeper.cpp" />
+    <ClCompile Include="Statistics\DefenseStats.cpp" />
+    <ClCompile Include="Statistics\ErrorStats.cpp" />
+    <ClCompile Include="Statistics\StatTracker.cpp" />
+    <ClCompile Include="UI\GameDisplay.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\MatchManager.h" />
+    <ClInclude Include="Core\RallyRecorder.h" />
+    <ClInclude Include="doctest.h" />
+    <ClInclude Include="Model\Touch.h" />
+    <ClInclude Include="Rules\Rules.h" />
+    <ClInclude Include="Scoring\ScoreKeeper.h" />
+    <ClInclude Include="Statistics\AttackStats.h" />
+    <ClInclude Include="Statistics\DefenseStats.h" />
+    <ClInclude Include="Statistics\ErrorStats.h" />
+    <ClInclude Include="Statistics\StatTracker.h" />
+    <ClInclude Include="UI\GameDisplay.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -105,6 +130,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\uzuma\source\repos\Beach Volleyball Analyzer\Beach Volleyball Analyzer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,25 +152,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Beach Volleyball Analyzer.cpp" />
-    <ClCompile Include="GameDisplay.cpp" />
-    <ClCompile Include="MatchManager.cpp" />
-    <ClCompile Include="RallyRecorder.cpp" />
-    <ClCompile Include="Rules.cpp" />
-    <ClCompile Include="ScoreKeeper.cpp" />
-    <ClCompile Include="StatTracker.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="doctest.h" />
-    <ClInclude Include="GameDisplay.h" />
-    <ClInclude Include="MatchManager.h" />
-    <ClInclude Include="RallyRecorder.h" />
-    <ClInclude Include="Rules.h" />
-    <ClInclude Include="ScoreKeeper.h" />
-    <ClInclude Include="StatTracker.h" />
-    <ClInclude Include="Touch.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

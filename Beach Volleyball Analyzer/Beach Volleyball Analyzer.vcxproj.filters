@@ -13,53 +13,74 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{6e4c0396-6509-4e00-8ea8-f4169af38943}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\MatchManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\RallyRecorder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rules\Rules.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scoring\ScoreKeeper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Statistics\StatTracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\GameDisplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Beach Volleyball Analyzer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MatchManager.cpp">
+    <ClCompile Include="Statistics\AttackStats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RallyRecorder.cpp">
+    <ClCompile Include="Statistics\DefenseStats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScoreKeeper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StatTracker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameDisplay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rules.cpp">
+    <ClCompile Include="Statistics\ErrorStats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MatchManager.h">
+    <ClInclude Include="Core\MatchManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RallyRecorder.h">
+    <ClInclude Include="Core\RallyRecorder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScoreKeeper.h">
+    <ClInclude Include="Model\Touch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StatTracker.h">
+    <ClInclude Include="Rules\Rules.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameDisplay.h">
+    <ClInclude Include="Scoring\ScoreKeeper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Rules.h">
+    <ClInclude Include="Statistics\StatTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Touch.h">
+    <ClInclude Include="UI\GameDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="doctest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Statistics\AttackStats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Statistics\DefenseStats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Statistics\ErrorStats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
