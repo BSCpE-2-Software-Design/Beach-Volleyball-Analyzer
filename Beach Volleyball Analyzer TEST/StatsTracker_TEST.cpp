@@ -1,5 +1,5 @@
 #include "doctest.h"
-#include "StatTracker.h"
+#include "Statistics/StatTracker.h"
 
 TEST_CASE("StatTracker - recordTouch") {
     StatTracker tracker;

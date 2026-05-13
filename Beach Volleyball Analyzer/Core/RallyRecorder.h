@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <string>
-#include "Touch.h"
+#include "Model/Touch.h"
 
 class RallyRecorder {
 private:

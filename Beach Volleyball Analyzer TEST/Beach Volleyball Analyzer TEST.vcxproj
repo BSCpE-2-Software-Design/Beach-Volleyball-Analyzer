@@ -128,15 +128,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Beach Volleyball Analyzer\GameDisplay.cpp" />
-    <ClCompile Include="..\Beach Volleyball Analyzer\MatchManager.cpp" />
-    <ClCompile Include="..\Beach Volleyball Analyzer\RallyRecorder.cpp" />
-    <ClCompile Include="..\Beach Volleyball Analyzer\Rules.cpp" />
-    <ClCompile Include="..\Beach Volleyball Analyzer\ScoreKeeper.cpp" />
-    <ClCompile Include="..\Beach Volleyball Analyzer\StatTracker.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Core\MatchManager.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Core\RallyRecorder.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Rules\Rules.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Scoring\ScoreKeeper.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\UI\GameDisplay.cpp" />
     <ClCompile Include="Beach Volleyball Analyzer TEST.cpp" />
     <ClCompile Include="MatchManager_TEST.cpp" />
     <ClCompile Include="StatsTracker_TEST.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Core\MatchManager.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Core\RallyRecorder.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Model\Touch.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Rules\Rules.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Scoring\ScoreKeeper.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\UI\GameDisplay.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

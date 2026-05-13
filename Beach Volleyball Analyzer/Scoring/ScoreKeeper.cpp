@@ -1,5 +1,5 @@
-#include "ScoreKeeper.h"
-#include "Rules.h"
+#include "Scoring/ScoreKeeper.h"
+#include "Rules/Rules.h"
 #include <iostream>
 
 ScoreKeeper::ScoreKeeper()

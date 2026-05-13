@@ -1,5 +1,5 @@
 #include "MatchManager.h"
-#include "GameDisplay.h"
+#include "UI/GameDisplay.h"
 #include <iostream>
 #include <cctype>
 

@@ -24,23 +24,46 @@
     <ClCompile Include="StatsTracker_TEST.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Beach Volleyball Analyzer\MatchManager.cpp">
+    <ClCompile Include="..\Beach Volleyball Analyzer\UI\GameDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Beach Volleyball Analyzer\StatTracker.cpp">
+    <ClCompile Include="..\Beach Volleyball Analyzer\Core\MatchManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Beach Volleyball Analyzer\GameDisplay.cpp">
+    <ClCompile Include="..\Beach Volleyball Analyzer\Core\RallyRecorder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Beach Volleyball Analyzer\RallyRecorder.cpp">
+    <ClCompile Include="..\Beach Volleyball Analyzer\Rules\Rules.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Beach Volleyball Analyzer\Rules.cpp">
+    <ClCompile Include="..\Beach Volleyball Analyzer\Scoring\ScoreKeeper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Beach Volleyball Analyzer\ScoreKeeper.cpp">
+    <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Beach Volleyball Analyzer\UI\GameDisplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Core\MatchManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Core\RallyRecorder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Model\Touch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Rules\Rules.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Scoring\ScoreKeeper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

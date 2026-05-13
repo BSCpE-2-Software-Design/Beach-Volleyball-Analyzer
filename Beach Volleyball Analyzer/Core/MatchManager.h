@@ -1,8 +1,8 @@
 #pragma once
 
-#include "RallyRecorder.h"
-#include "ScoreKeeper.h"
-#include "StatTracker.h"
+#include "Core/RallyRecorder.h"
+#include "Scoring/ScoreKeeper.h"
+#include "Statistics/StatTracker.h"
 
 class MatchManager {
 private:
