@@ -16,6 +16,7 @@ void StatTracker::recordAssist(int playerId) {
 
 void StatTracker::recordBlockPoint(int playerId) {
     m_defenseStats.recordBlockPoint(playerId);
+    }
 }
 
 void StatTracker::recordUnsuccessfulBlock(int playerId) {
@@ -24,7 +25,7 @@ void StatTracker::recordUnsuccessfulBlock(int playerId) {
 
 void StatTracker::recordDig(int playerId, bool error) {
     m_defenseStats.recordDig(playerId, error);
-}
+    }
 
 void StatTracker::recordTouch(int playerId) {
     m_errorStats.recordTouch(playerId);
