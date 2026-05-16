@@ -16,7 +16,6 @@ void StatTracker::recordAssist(int playerId) {
 
 void StatTracker::recordBlockPoint(int playerId) {
     m_defenseStats.recordBlockPoint(playerId);
-    }
 }
 
 void StatTracker::recordUnsuccessfulBlock(int playerId) {

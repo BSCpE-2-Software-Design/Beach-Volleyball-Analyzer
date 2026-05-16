@@ -19,11 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Rules\ScoringRules.cpp" />
+    <ClCompile Include="Rules\TouchRules.cpp" />
     <ClCompile Include="Statistics\AttackStats.cpp" />
     <ClCompile Include="Beach Volleyball Analyzer.cpp" />
     <ClCompile Include="Core\MatchManager.cpp" />
     <ClCompile Include="Core\RallyRecorder.cpp" />
-    <ClCompile Include="Rules\Rules.cpp" />
     <ClCompile Include="Scoring\ScoreKeeper.cpp" />
     <ClCompile Include="Statistics\DefenseStats.cpp" />
     <ClCompile Include="Statistics\ErrorStats.cpp" />
@@ -36,6 +37,8 @@
     <ClInclude Include="doctest.h" />
     <ClInclude Include="Model\Touch.h" />
     <ClInclude Include="Rules\Rules.h" />
+    <ClInclude Include="Rules\ScoringRules.h" />
+    <ClInclude Include="Rules\TouchRules.h" />
     <ClInclude Include="Scoring\ScoreKeeper.h" />
     <ClInclude Include="Statistics\AttackStats.h" />
     <ClInclude Include="Statistics\DefenseStats.h" />
