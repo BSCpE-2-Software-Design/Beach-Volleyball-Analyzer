@@ -1,12 +1,26 @@
+// Beach Volleyball Analyzer\Rules.h
 #pragma once
+
+#include "TouchRules.h"
+#include "ScoringRules.h"
 
 class VolleyballRules {
 public:
-    static const int MAX_TOUCHES = 3;
-    static const int WINNING_SCORE = 21;
-    static const int NEED_WIN_BY = 2;
+    // Access touch rules
+    static bool isFourTouchViolation(int touches) {
+        return TouchRules::isFourTouchViolation(touches);
+    }
 
-    static bool isFourTouchViolation(int touches);
-    static bool isDoubleTouch(int lastPlayer, int currentPlayer);
-    static bool isGameOver(int scoreA, int scoreB);
+    static bool isDoubleTouch(int lastPlayer, int currentPlayer) {
+        return TouchRules::isDoubleTouch(lastPlayer, currentPlayer);
+    }
+
+    // Access scoring rules
+    static bool isGameOver(int scoreA, int scoreB) {
+        return ScoringRules::isGameOver(scoreA, scoreB);
+    }
+
+    static bool isSetWon(int teamScore, int opponentScore) {
+        return ScoringRules::isSetWon(teamScore, opponentScore);
+    }
 };

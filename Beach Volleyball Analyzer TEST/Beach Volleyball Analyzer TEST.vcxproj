@@ -130,12 +130,20 @@
   <ItemGroup>
     <ClCompile Include="..\Beach Volleyball Analyzer\Core\MatchManager.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Core\RallyRecorder.cpp" />
-    <ClCompile Include="..\Beach Volleyball Analyzer\Rules\Rules.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Rules\ScoringRules.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Rules\TouchRules.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Scoring\ScoreKeeper.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\AttackStats.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\DefenseStats.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\ErrorStats.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\UI\GameDisplay.cpp" />
-    <ClCompile Include="Beach Volleyball Analyzer TEST.cpp" />
+    <ClCompile Include="Beach Volleyball Analyzer TEST.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\uzuma\source\repos\Beach Volleyball Analyzer\Beach Volleyball Analyzer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="MatchManager_TEST.cpp" />
+    <ClCompile Include="Rules_TEST.cpp" />
+    <ClCompile Include="ScoringRules_TEST.cpp" />
     <ClCompile Include="StatsTracker_TEST.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -143,7 +151,12 @@
     <ClInclude Include="..\Beach Volleyball Analyzer\Core\RallyRecorder.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Model\Touch.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Rules\Rules.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Rules\ScoringRules.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Rules\TouchRules.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Scoring\ScoreKeeper.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\AttackStats.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\DefenseStats.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\ErrorStats.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\UI\GameDisplay.h" />
   </ItemGroup>

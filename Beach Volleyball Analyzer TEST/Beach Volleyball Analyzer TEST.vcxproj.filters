@@ -33,13 +33,31 @@
     <ClCompile Include="..\Beach Volleyball Analyzer\Core\RallyRecorder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Beach Volleyball Analyzer\Rules\Rules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Beach Volleyball Analyzer\Scoring\ScoreKeeper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rules_TEST.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Beach Volleyball Analyzer\Rules\ScoringRules.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Beach Volleyball Analyzer\Rules\TouchRules.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\AttackStats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\DefenseStats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\ErrorStats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoringRules_TEST.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -63,6 +81,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Rules\ScoringRules.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Rules\TouchRules.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\AttackStats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\DefenseStats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\ErrorStats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
