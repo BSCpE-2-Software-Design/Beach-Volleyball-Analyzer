@@ -36,6 +36,7 @@ void StatTracker::recordError(int playerId) {
 
 void StatTracker::recordPoint(int playerId) {
     m_errorStats.recordPoint(playerId);
+    m_attackStats.recordPoint(playerId);
 }
 
 void StatTracker::printReport() const {

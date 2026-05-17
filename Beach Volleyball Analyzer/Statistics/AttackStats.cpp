@@ -1,5 +1,4 @@
-// Beach Volleyball Analyzer\AttackStats.cpp
-#include "AttackStats.h"
+#include "Statistics/AttackStats.h"
 #include <iostream>
 #include <iomanip>
 #include <set>
@@ -17,6 +16,10 @@ void AttackStats::recordAceServe(int playerId) {
 
 void AttackStats::recordAssist(int playerId) {
     m_assists[playerId]++;
+}
+
+void AttackStats::recordPoint(int playerId) {
+    m_points[playerId]++;
 }
 
 int AttackStats::getAttacks(int playerId) const {
@@ -39,6 +42,11 @@ int AttackStats::getAssists(int playerId) const {
     return it != m_assists.end() ? it->second : 0;
 }
 
+int AttackStats::getPoints(int playerId) const {
+    auto it = m_points.find(playerId);
+    return it != m_points.end() ? it->second : 0;
+}
+
 void AttackStats::printAttackStats() const {
     std::cout << "\n=== ATTACK STATS ===\n";
 
@@ -48,13 +56,26 @@ void AttackStats::printAttackStats() const {
     for (const auto& pair : m_aceServes) allPlayers.insert(pair.first);
     for (const auto& pair : m_assists) allPlayers.insert(pair.first);
     for (const auto& pair : m_attackErrors) allPlayers.insert(pair.first);
+    for (const auto& pair : m_points) allPlayers.insert(pair.first);
+
+    // Print header
+    std::cout << std::left
+        << std::setw(10) << "Player"
+        << std::setw(12) << "Attacks"
+        << std::setw(12) << "Errors"
+        << std::setw(10) << "Aces"
+        << std::setw(12) << "Assists"
+        << std::setw(10) << "Points" << "\n";
+    std::cout << std::string(56, '-') << "\n";
 
     // Print stats for all players
     for (int playerId : allPlayers) {
-        std::cout << "Player " << playerId << ": "
-            << "Attacks: " << getAttacks(playerId)
-            << " | Errors: " << getAttackErrors(playerId)
-            << " | Aces: " << getAceServes(playerId)
-            << " | Assists: " << getAssists(playerId) << "\n";
+        std::cout << std::left
+            << std::setw(10) << playerId
+            << std::setw(12) << getAttacks(playerId)
+            << std::setw(12) << getAttackErrors(playerId)
+            << std::setw(10) << getAceServes(playerId)
+            << std::setw(12) << getAssists(playerId)
+            << std::setw(10) << getPoints(playerId) << "\n";
     }
 }

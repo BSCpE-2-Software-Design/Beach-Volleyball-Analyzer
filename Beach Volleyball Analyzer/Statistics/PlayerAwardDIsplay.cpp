@@ -81,7 +81,7 @@ void PlayerAwardsDisplay::displayAwards(const AttackStats& attackStats,
     }
 
     if (bestBlocker != -1) {
-        std::cout << " Best Blocker: Player " << bestBlocker 
+        std::cout << "Best Blocker: Player " << bestBlocker 
                   << " (" << bestBlockCount << " block points)\n";
     }
 

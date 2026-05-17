@@ -69,6 +69,9 @@
     <ClCompile Include="Statistics\PlayerAwardDIsplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UI\InputValidator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\MatchManager.h">
@@ -126,6 +129,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Statistics\PlayerAwardsDisplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\InputValidator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

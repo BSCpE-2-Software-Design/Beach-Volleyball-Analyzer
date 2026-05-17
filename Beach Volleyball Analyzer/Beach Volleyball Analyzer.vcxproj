@@ -36,6 +36,7 @@
     <ClCompile Include="Statistics\PlayerAwardDIsplay.cpp" />
     <ClCompile Include="Statistics\StatTracker.cpp" />
     <ClCompile Include="UI\GameDisplay.cpp" />
+    <ClCompile Include="UI\InputValidator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\AttackHandler.h" />
@@ -57,6 +58,7 @@
     <ClInclude Include="Statistics\PlayerAwardsDisplay.h" />
     <ClInclude Include="Statistics\StatTracker.h" />
     <ClInclude Include="UI\GameDisplay.h" />
+    <ClInclude Include="UI\InputValidator.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

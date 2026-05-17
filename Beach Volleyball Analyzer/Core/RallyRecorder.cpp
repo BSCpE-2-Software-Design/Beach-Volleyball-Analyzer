@@ -22,15 +22,35 @@ bool RallyRecorder::addTouch(int playerId, const std::string& action, int teamId
     if (action == "serve") {
         m_hasServed = true;
         m_servingPlayer = playerId;
+        int servingTeam = (playerId < 2) ? 0 : 1;
+
+        // Add serve touch
+        Touch t = { playerId, action, servingTeam };
+        m_currentRally.push_back(t);
+
+        m_lastTouchPlayer = playerId;
+        m_lastTouchTeam = servingTeam;
+        m_consecutiveTouchesSameTeam = 1;
+
+        return true;
     }
 
-    // RULE 3: Double touch (same player twice in a row on same team)
+    // RULE 3: After serve, the OPPOSITE team must touch the ball first
+    if (m_hasServed && m_currentRally.size() == 1) {
+        int servingTeam = m_lastTouchTeam;
+        if (teamId == servingTeam) {
+            m_lastError = "SERVING TEAM CANNOT TOUCH AFTER SERVE - Other team must receive";
+            return false;
+        }
+    }
+
+    // RULE 4: Double touch (same player twice in a row on same team)
     if (m_lastTouchPlayer == playerId && m_lastTouchTeam == teamId) {
         m_lastError = "DOUBLE TOUCH";
         return false;
     }
-    
-    // RULE 4: Team change - reset consecutive counter
+
+    // RULE 5: Team change - reset consecutive counter
     if (m_lastTouchTeam != teamId && m_lastTouchTeam != -1) {
         m_consecutiveTouchesSameTeam = 0;
     }
@@ -43,7 +63,7 @@ bool RallyRecorder::addTouch(int playerId, const std::string& action, int teamId
     m_lastTouchPlayer = playerId;
     m_lastTouchTeam = teamId;
 
-    // RULE 5: 4-touch violation (same team touched 4 times in a row)
+    // RULE 6: 4-touch violation (same team touched 4 times in a row)
     if (m_consecutiveTouchesSameTeam > 3) {
         m_lastError = "FOUR TOUCH VIOLATION - Same team touched 4 times";
         return false;
@@ -55,13 +75,13 @@ bool RallyRecorder::addTouch(int playerId, const std::string& action, int teamId
 bool RallyRecorder::addUnsuccessfulBlock(int playerId, int teamId) {
     // NEW RULE: Unsuccessful block does NOT count toward 4-touch limit
     // But it IS recorded in the rally log for reference
-    
+
     // RULE 3: Double touch check
     if (m_lastTouchPlayer == playerId && m_lastTouchTeam == teamId) {
         m_lastError = "DOUBLE TOUCH";
         return false;
     }
-    
+
     // RULE 4: Team change - reset consecutive counter
     if (m_lastTouchTeam != teamId && m_lastTouchTeam != -1) {
         m_consecutiveTouchesSameTeam = 0;
@@ -77,7 +97,7 @@ bool RallyRecorder::addUnsuccessfulBlock(int playerId, int teamId) {
 
     // DO NOT increment m_consecutiveTouchesSameTeam
     // This allows the 4-touch rule to be legal
-    
+
     return true;
 }
 
