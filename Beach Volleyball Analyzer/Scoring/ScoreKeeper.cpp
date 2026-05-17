@@ -23,7 +23,7 @@ void ScoreKeeper::addPoint(int team) {
 void ScoreKeeper::handleServeResult(int servingPlayer, bool pointWon) {
     int team = (servingPlayer < 2) ? 0 : 1;
 
-    std::cout << "=== DEBUG ===" << std::endl;
+    std::cout << "=== RALLY STATUS ===" << std::endl;
     std::cout << "Serving player: " << servingPlayer << " (Team " << team << ")" << std::endl;
     std::cout << "Point won: " << pointWon << std::endl;
     std::cout << "Current serving team before: " << m_servingTeam << std::endl;

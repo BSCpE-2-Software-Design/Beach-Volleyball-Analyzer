@@ -17,7 +17,10 @@ void AttackHandler::handle(int playerId, int teamId) {
     if (servingPlayer == -1) servingPlayer = m_match->getScore().getCurrentServer();
 
     if (attErr == 'Y') {
-        m_match->getScore().handleServeResult(servingPlayer, false);
+        // Force point to other team
+        int otherTeam = (teamId == 0) ? 1 : 0;
+        m_match->getScore().addPoint(otherTeam);
+        m_match->getScore().setServingTeam(otherTeam);
         m_match->getStats().recordAttack(playerId, true);
         m_match->getStats().recordError(playerId);
         GameDisplay::showMessage("ATTACK ERROR - Point to Team " + std::string(otherTeam == 0 ? "A" : "B") + ", serve switches");
