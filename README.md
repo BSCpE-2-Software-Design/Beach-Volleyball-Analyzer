@@ -1,7 +1,17 @@
 # Beach-Volleyball-Analyzer
+A comprehensive C++ system for real-time beach volleyball match analysis, tracking plays, statistics, and scores for both teams and individual players.
 
+## 🎯 Overview
 
- CLASS DIAGRAM (not final)
+The **Beach Volleyball Analyzer** is a software system designed to digitize and automate the analysis of beach volleyball matches. It provides real-time rally tracking, violation detection, statistical analysis, and score management, helping coaches, players, and analysts gain insights into game performance.
+
+Built with object-oriented design principles, the system handles the complete match flow from serve to point scoring, including:
+- Rally-by-rally play recording
+- Real-time violation detection (4-touch, double touch, service errors)
+- Comprehensive player and team statistics
+- Win/loss margin validation following official beach volleyball rules
+
+ CLASS DIAGRAM
  ```mermaid
 classDiagram
     %% Core System
@@ -25,7 +35,18 @@ classDiagram
         +updateScore()
     }
 
-    %% Rules (Refactored into two classes - SRP applied)
+    %% Handlers
+    class ServeHandler {
+        +handleServe(serveTouch)
+        -isValidServe(Touch) bool
+    }
+
+    class AttackHandler {
+        +handleAttack(attackTouch)
+        -isValidAttack(Touch) bool
+    }
+
+    %% Rules
     class ScoringRules {
         +isGameOver(score1, score2) bool
         +isSetFinished(score1, score2) bool
@@ -39,7 +60,7 @@ classDiagram
         +isServiceError(Touch) bool
     }
 
-    %% Scoring & Stats (Refactored - ISP applied)
+    %% Scoring & Stats
     class ScoreKeeper {
         +addPoint(teamId)
         +getTeamScore(teamId) int
@@ -90,92 +111,87 @@ classDiagram
     MatchManager *-- StatTracker : composition
     MatchManager --> GameDisplay : association
     MatchManager ..> Touch : dependency
-    
+    MatchManager --> ServeHandler : association
+    MatchManager --> AttackHandler : association
+
     RallyRecorder --> TouchRules : association
     RallyRecorder --> ScoreKeeper : association
     RallyRecorder --> GameDisplay : association
-    
+
     StatTracker *-- AttackStats : composition
     StatTracker *-- DefenseStats : composition
     StatTracker *-- ErrorStats : composition
-    
+
     ScoreKeeper --> ScoringRules : association
 ```
 
 
-SEQUENCE DIAGRAM (not final)
+SEQUENCE DIAGRAM
 ```mermaid
 sequenceDiagram
     actor User
-    participant MatchManager
-    participant RallyRecorder
-    participant TouchRules
-    participant ScoreKeeper
-    participant GameDisplay
-    participant StatTracker
+    participant MM as MatchManager
+    participant RR as RallyRecorder
+    participant AH as AttackHandler
+    participant TR as TouchRules
+    participant SK as ScoreKeeper
+    participant GD as GameDisplay
+    participant ST as StatTracker
 
-    User->>MatchManager: click(playerId, teamId, "ATTACK")
-    activate MatchManager
-    
-    MatchManager->>RallyRecorder: addTouch(attack)
-    activate RallyRecorder
-    
-    RallyRecorder->>TouchRules: isAttackValid(attack)
-    activate TouchRules
-    TouchRules-->>RallyRecorder: valid (bool)
-    deactivate TouchRules
-
-    alt Attack Failed (Error)
-        RallyRecorder->>ScoreKeeper: addPoint(opposingTeam)
-        activate ScoreKeeper
-        ScoreKeeper-->>RallyRecorder: score updated
-        deactivate ScoreKeeper
+    loop Each Rally
+        Note over User,ST: Start Rally (Serve or Dig Return)
         
-        RallyRecorder->>StatTracker: recordError(playerId)
-        RallyRecorder->>GameDisplay: showError("Attack failed!")
-        GameDisplay-->>User: "Point to Team X"
+        User->>MM: click(playerId, teamId, action)
+        activate MM
+        MM->>RR: addTouch(action)
+        activate RR
         
-    else Attack Successful
-        RallyRecorder->>GameDisplay: updateLog("Attack successful!")
-        GameDisplay-->>User: "Choose defense (Block/Dig)"
-        
-        User->>MatchManager: click(defenderId, teamId, "BLOCK" or "DIG")
-        MatchManager->>RallyRecorder: addTouch(defense)
-        
-        alt Defense = BLOCK
-            RallyRecorder->>TouchRules: isBlockValid(block)
-            TouchRules-->>RallyRecorder: valid
-            
-            alt Block Successful
-                RallyRecorder->>ScoreKeeper: addPoint(defendingTeam)
-                RallyRecorder->>StatTracker: recordBlockSuccess(defenderId)
-                RallyRecorder->>GameDisplay: showError("Block successful!")
-                GameDisplay-->>User: "Point to defending team!"
-            else Block Failed
-                RallyRecorder->>ScoreKeeper: addPoint(attackingTeam)
-                RallyRecorder->>StatTracker: recordAttackSuccess(attackerId)
-                RallyRecorder->>GameDisplay: showError("Block failed!")
-                GameDisplay-->>User: "Point to attacking team!"
-            end
-            
-        else Defense = DIG
-            RallyRecorder->>TouchRules: isDigValid(dig)
-            TouchRules-->>RallyRecorder: valid
-            
-            alt Dig Successful
-                RallyRecorder->>StatTracker: recordDigSuccess(defenderId)
-                RallyRecorder->>GameDisplay: updateLog("Dig successful! Rally continues")
-                GameDisplay-->>User: "Rally continues (no point)"
-                Note over RallyRecorder: Reset rally state, next touch starts new sequence
-            else Dig Failed
-                RallyRecorder->>ScoreKeeper: addPoint(attackingTeam)
-                RallyRecorder->>StatTracker: recordAttackSuccess(attackerId)
-                RallyRecorder->>GameDisplay: showError("Dig failed!")
-                GameDisplay-->>User: "Point to attacking team!"
-            end
+        alt Is Serve
+            RR->>TR: validateServe()
+        else Is Attack
+            RR->>AH: handleAttack()
+            AH->>TR: validateAttack()
+        else Is Defense
+            RR->>TR: validateDefense()
         end
+        
+        TR-->>RR: isValid
+        
+        alt Action Invalid (Error)
+            RR->>SK: addPoint(opponent)
+            RR->>ST: recordError(playerId)
+            RR->>GD: showError()
+            GD-->>User: "Point awarded"
+            RR->>RR: resetRally()
+            Note over RR: Rally Ends
+            
+        else Defense = DIG and Successful
+            RR->>ST: recordDigSuccess()
+            RR->>GD: updateLog("Rally continues")
+            Note over RR: Rally Continues - Next touch
+            
+        else Action Valid and Point Won
+            alt Block Success
+                RR->>SK: addPoint(defender)
+                RR->>ST: recordBlockSuccess()
+            else Attack Success
+                RR->>SK: addPoint(attacker)
+                RR->>ST: recordAttackSuccess()
+            end
+            RR->>GD: showResult()
+            GD-->>User: "Point awarded"
+            RR->>RR: resetRally()
+            Note over RR: Rally Ends
+        end
+        
+        deactivate RR
+        deactivate MM
     end
     
-    deactivate RallyRecorder
-    deactivate MatchManager
+    Note over User,ST: Game continues until winning condition met
+    SK->>SK: checkGameOver()
+    alt Game Over
+        SK->>GD: displayWinner()
+        GD-->>User: "Game Over - Winner!"
+    end
 ```
