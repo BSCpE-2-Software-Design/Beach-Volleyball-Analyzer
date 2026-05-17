@@ -17,6 +17,7 @@ private:
 public:
     RallyRecorder();
     bool addTouch(int playerId, const std::string& action, int teamId);
+    bool addUnsuccessfulBlock(int playerId, int teamId);  
     void clearRally();
     std::string getLastError() const;
     int getConsecutiveTouches() const;

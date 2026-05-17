@@ -6,7 +6,6 @@ RallyRecorder::RallyRecorder()
 }
 
 bool RallyRecorder::addTouch(int playerId, const std::string& action, int teamId) {
-
     // RULE 1: First action of every rally MUST be a serve
     if (!m_hasServed && action != "serve") {
         m_lastError = "RALLY MUST START WITH SERVE";
@@ -30,6 +29,7 @@ bool RallyRecorder::addTouch(int playerId, const std::string& action, int teamId
         m_lastError = "DOUBLE TOUCH";
         return false;
     }
+    
     // RULE 4: Team change - reset consecutive counter
     if (m_lastTouchTeam != teamId && m_lastTouchTeam != -1) {
         m_consecutiveTouchesSameTeam = 0;
@@ -49,6 +49,35 @@ bool RallyRecorder::addTouch(int playerId, const std::string& action, int teamId
         return false;
     }
 
+    return true;
+}
+
+bool RallyRecorder::addUnsuccessfulBlock(int playerId, int teamId) {
+    // NEW RULE: Unsuccessful block does NOT count toward 4-touch limit
+    // But it IS recorded in the rally log for reference
+    
+    // RULE 3: Double touch check
+    if (m_lastTouchPlayer == playerId && m_lastTouchTeam == teamId) {
+        m_lastError = "DOUBLE TOUCH";
+        return false;
+    }
+    
+    // RULE 4: Team change - reset consecutive counter
+    if (m_lastTouchTeam != teamId && m_lastTouchTeam != -1) {
+        m_consecutiveTouchesSameTeam = 0;
+    }
+
+    // Add touch to rally log (for record-keeping)
+    Touch t = { playerId, "block (unsuccessful)", teamId };
+    m_currentRally.push_back(t);
+
+    // Update last touch info for double-touch checking
+    m_lastTouchPlayer = playerId;
+    m_lastTouchTeam = teamId;
+
+    // DO NOT increment m_consecutiveTouchesSameTeam
+    // This allows the 4-touch rule to be legal
+    
     return true;
 }
 

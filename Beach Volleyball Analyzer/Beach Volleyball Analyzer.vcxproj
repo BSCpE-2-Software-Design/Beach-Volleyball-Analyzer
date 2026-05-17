@@ -19,6 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\AttackHandler.cpp" />
+    <ClCompile Include="Core\DigHandler.cpp" />
+    <ClCompile Include="Core\PassHandler.cpp" />
+    <ClCompile Include="Core\ServeHandler.cpp" />
+    <ClCompile Include="Core\SetHandler.cpp" />
     <ClCompile Include="Rules\ScoringRules.cpp" />
     <ClCompile Include="Rules\TouchRules.cpp" />
     <ClCompile Include="Statistics\AttackStats.cpp" />
@@ -32,8 +37,13 @@
     <ClCompile Include="UI\GameDisplay.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\AttackHandler.h" />
+    <ClInclude Include="Core\DigHandler.h" />
     <ClInclude Include="Core\MatchManager.h" />
+    <ClInclude Include="Core\PassHandler.h" />
     <ClInclude Include="Core\RallyRecorder.h" />
+    <ClInclude Include="Core\ServeHandler.h" />
+    <ClInclude Include="Core\SetHandler.h" />
     <ClInclude Include="doctest.h" />
     <ClInclude Include="Model\Touch.h" />
     <ClInclude Include="Rules\Rules.h" />
