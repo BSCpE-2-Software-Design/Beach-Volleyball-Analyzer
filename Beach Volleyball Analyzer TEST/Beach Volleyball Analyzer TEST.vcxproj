@@ -128,14 +128,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Beach Volleyball Analyzer\Core\AttackHandler.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Core\DigHandler.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Core\MatchManager.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Core\PassHandler.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Core\RallyRecorder.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Core\ServeHandler.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Core\SetHandler.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Rules\ScoringRules.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Rules\TouchRules.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Scoring\ScoreKeeper.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\AttackStats.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\DefenseStats.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\ErrorStats.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\PlayerAwardDIsplay.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\UI\GameDisplay.cpp" />
     <ClCompile Include="Beach Volleyball Analyzer TEST.cpp">
@@ -147,8 +153,13 @@
     <ClCompile Include="StatsTracker_TEST.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Beach Volleyball Analyzer\Core\AttackHandler.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Core\DigHandler.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Core\MatchManager.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Core\PassHandler.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Core\RallyRecorder.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Core\ServeHandler.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Core\SetHandler.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Model\Touch.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Rules\Rules.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Rules\ScoringRules.h" />
@@ -157,6 +168,7 @@
     <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\AttackStats.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\DefenseStats.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\ErrorStats.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\PlayerAwardsDisplay.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\UI\GameDisplay.h" />
   </ItemGroup>
