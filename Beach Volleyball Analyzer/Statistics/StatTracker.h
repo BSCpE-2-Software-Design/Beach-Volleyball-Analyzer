@@ -3,6 +3,7 @@
 #include "AttackStats.h"
 #include "DefenseStats.h"
 #include "ErrorStats.h"
+#include "PlayerAwardsDisplay.h"
 
 class StatTracker {
 private:
@@ -25,6 +26,11 @@ public:
     void recordTouch(int playerId);
     void recordError(int playerId);
     void recordPoint(int playerId);
+    
+    // Accessors for awards display
+    const AttackStats& getAttackStats() const { return m_attackStats; }
+    const DefenseStats& getDefenseStats() const { return m_defenseStats; }
+    const ErrorStats& getErrorStats() const { return m_errorStats; }
     
     void printReport() const;
     void printDetailedStats() const;

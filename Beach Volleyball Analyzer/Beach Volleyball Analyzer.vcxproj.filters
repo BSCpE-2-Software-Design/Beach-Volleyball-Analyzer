@@ -66,6 +66,9 @@
     <ClCompile Include="Core\DigHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Statistics\PlayerAwardDIsplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\MatchManager.h">
@@ -120,6 +123,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\DigHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Statistics\PlayerAwardsDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

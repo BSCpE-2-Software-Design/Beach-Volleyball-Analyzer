@@ -24,7 +24,7 @@ void StatTracker::recordUnsuccessfulBlock(int playerId) {
 
 void StatTracker::recordDig(int playerId, bool error) {
     m_defenseStats.recordDig(playerId, error);
-    }
+}
 
 void StatTracker::recordTouch(int playerId) {
     m_errorStats.recordTouch(playerId);
@@ -43,6 +43,7 @@ void StatTracker::printReport() const {
     m_errorStats.printErrorStats();
     m_attackStats.printAttackStats();
     m_defenseStats.printDefenseStats();
+    PlayerAwardsDisplay::displayAwards(m_attackStats, m_defenseStats, m_errorStats);
 }
 
 void StatTracker::printDetailedStats() const {

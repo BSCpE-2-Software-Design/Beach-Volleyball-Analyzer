@@ -33,6 +33,7 @@
     <ClCompile Include="Scoring\ScoreKeeper.cpp" />
     <ClCompile Include="Statistics\DefenseStats.cpp" />
     <ClCompile Include="Statistics\ErrorStats.cpp" />
+    <ClCompile Include="Statistics\PlayerAwardDIsplay.cpp" />
     <ClCompile Include="Statistics\StatTracker.cpp" />
     <ClCompile Include="UI\GameDisplay.cpp" />
   </ItemGroup>
@@ -53,6 +54,7 @@
     <ClInclude Include="Statistics\AttackStats.h" />
     <ClInclude Include="Statistics\DefenseStats.h" />
     <ClInclude Include="Statistics\ErrorStats.h" />
+    <ClInclude Include="Statistics\PlayerAwardsDisplay.h" />
     <ClInclude Include="Statistics\StatTracker.h" />
     <ClInclude Include="UI\GameDisplay.h" />
   </ItemGroup>
