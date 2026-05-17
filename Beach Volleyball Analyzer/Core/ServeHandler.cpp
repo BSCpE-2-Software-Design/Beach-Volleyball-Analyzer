@@ -15,6 +15,7 @@ void ServeHandler::handle(int playerId, int teamId) {
 
     if (servRes == 'A') {
         m_match->getScore().handleServeResult(playerId, true);
+        m_match->getStats().recordAceServe(playerId);  // Changed from recordPoint
         m_match->getStats().recordPoint(playerId);
         GameDisplay::showMessage("SERVICE ACE! Team " + std::string(teamId == 0 ? "A" : "B") + " scores, serve continues");
         m_match->getRecorder().clearRally();
@@ -26,6 +27,7 @@ void ServeHandler::handle(int playerId, int teamId) {
         m_match->getRecorder().clearRally();
     }
     else if (servRes == 'O') {
-        std::cout << "Serve recorded. Rally continues...\n";
+        m_match->getStats().recordAssist(playerId);  // Add this line
+        std::cout << "Good set. Rally continues...\n";
     }
 }

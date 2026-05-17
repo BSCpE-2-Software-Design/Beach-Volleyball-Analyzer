@@ -1,4 +1,3 @@
-// Beach Volleyball Analyzer\AttackStats.cpp
 #include "AttackStats.h"
 #include <iostream>
 #include <iomanip>
@@ -41,20 +40,20 @@ int AttackStats::getAssists(int playerId) const {
 
 void AttackStats::printAttackStats() const {
     std::cout << "\n=== ATTACK STATS ===\n";
-
+    
     // Collect all unique player IDs from all maps
     std::set<int> allPlayers;
     for (const auto& pair : m_attacks) allPlayers.insert(pair.first);
     for (const auto& pair : m_aceServes) allPlayers.insert(pair.first);
     for (const auto& pair : m_assists) allPlayers.insert(pair.first);
     for (const auto& pair : m_attackErrors) allPlayers.insert(pair.first);
-
+    
     // Print stats for all players
     for (int playerId : allPlayers) {
         std::cout << "Player " << playerId << ": "
-            << "Attacks: " << getAttacks(playerId)
-            << " | Errors: " << getAttackErrors(playerId)
-            << " | Aces: " << getAceServes(playerId)
-            << " | Assists: " << getAssists(playerId) << "\n";
+                  << "Attacks: " << getAttacks(playerId)
+                  << " | Errors: " << getAttackErrors(playerId)
+                  << " | Aces: " << getAceServes(playerId)
+                  << " | Assists: " << getAssists(playerId) << "\n";
     }
 }
