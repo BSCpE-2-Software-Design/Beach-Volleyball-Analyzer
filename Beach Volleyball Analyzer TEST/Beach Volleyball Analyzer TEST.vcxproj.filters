@@ -78,6 +78,9 @@
     <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\PlayerAwardDIsplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Beach Volleyball Analyzer\UI\InputValidator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Beach Volleyball Analyzer\UI\GameDisplay.h">
@@ -132,6 +135,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\PlayerAwardsDisplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Beach Volleyball Analyzer\UI\InputValidator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

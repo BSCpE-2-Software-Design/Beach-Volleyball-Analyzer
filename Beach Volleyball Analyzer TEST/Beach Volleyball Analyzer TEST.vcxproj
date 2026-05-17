@@ -144,6 +144,7 @@
     <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\PlayerAwardDIsplay.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.cpp" />
     <ClCompile Include="..\Beach Volleyball Analyzer\UI\GameDisplay.cpp" />
+    <ClCompile Include="..\Beach Volleyball Analyzer\UI\InputValidator.cpp" />
     <ClCompile Include="Beach Volleyball Analyzer TEST.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\uzuma\source\repos\Beach Volleyball Analyzer\Beach Volleyball Analyzer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -171,6 +172,7 @@
     <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\PlayerAwardsDisplay.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\Statistics\StatTracker.h" />
     <ClInclude Include="..\Beach Volleyball Analyzer\UI\GameDisplay.h" />
+    <ClInclude Include="..\Beach Volleyball Analyzer\UI\InputValidator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
