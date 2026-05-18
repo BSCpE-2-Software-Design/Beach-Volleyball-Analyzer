@@ -86,9 +86,6 @@
     <ClInclude Include="Rules\Rules.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scoring\ScoreKeeper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Statistics\StatTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -132,6 +129,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UI\InputValidator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scoring\ScoreKeeper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
